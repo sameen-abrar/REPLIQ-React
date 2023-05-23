@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --port 3456",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 3456",
     "lint": "next lint"
   },
   "dependencies": {
     "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
+    "cookie": "^0.5.0",
+    "js-cookie": "^3.0.5",
     "next": "13.4.3",
     "postcss": "8.4.23",
     "react": "18.2.0",
