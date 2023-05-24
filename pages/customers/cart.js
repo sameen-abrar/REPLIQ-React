@@ -14,6 +14,7 @@ export default function Cart({ data }) {
   console.log(data);
   const [cart, setCart] = useState([]);
   const [coupons, setCoupons] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
   // console.log("asdasd", data[0].orderedItems);
 
@@ -29,7 +30,9 @@ export default function Cart({ data }) {
     async function fetchData() {
       try {
         // alert("are you sure?")
-        const response = await axios.get(`https://flagrant-part-production.up.railway.app/api/coupons`);
+        const response = await axios.get(
+          `https://flagrant-part-production.up.railway.app/api/coupons`
+        );
         const data = await response.data;
 
         setCoupons(data);
@@ -41,17 +44,19 @@ export default function Cart({ data }) {
   }, []);
 
   // console.log("the thing is that: ", coupons);
-  const [quantity, setQuantity] = useState(1);
+  
 
-  const handleIncrement = () => {
+  const handleIncrement = (item) => {
     setQuantity(quantity + 1);
-    // onUpdate({ ...item, quantity: quantity + 1 });
+    item.Amount += 1;
+    console.log(item);
   };
 
-  const handleDecrement = () => {
-    if (quantity > 1) {
+  const handleDecrement = (item) => {
+    if (item.Amount > 1) {
       setQuantity(quantity - 1);
-      // onUpdate({ ...item, quantity: quantity - 1 });
+      item.Amount -= 1;
+      console.log(item);
     }
   };
 
@@ -63,12 +68,15 @@ export default function Cart({ data }) {
       console.log(id);
 
       if (confirmed) {
-        const res = await fetch(`https://flagrant-part-production.up.railway.app/api/cart/delete/${id}`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await fetch(
+          `https://flagrant-part-production.up.railway.app/api/cart/delete/${id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Something went wrong");
@@ -98,15 +106,15 @@ export default function Cart({ data }) {
             </legend>
             <div className="flex justify-between items-center">
               <span className="text-gray-600">
-                {quantity !== null && (
+                {item.Amount !== null && (
                   <span className="text-gray-600">
-                    {item.menu.Price * quantity}
+                    {item.menu.Price * item.Amount}
                   </span>
                 )}
               </span>
               <button
                 className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
-                onClick={() => handleRemove(item.id)}
+                onClick={() => handleRemove(item)}
               >
                 Remove
               </button>
@@ -114,14 +122,14 @@ export default function Cart({ data }) {
             <div className="flex items-center">
               <button
                 className="px-2 py-1 bg-gray-300 text-white rounded-md"
-                onClick={handleDecrement}
+                onClick={() => handleDecrement(item)}
               >
                 -
               </button>
-              <p className="mx-2">{quantity}</p>
+              <p className="mx-2">{item.Amount}</p>
               <button
                 className="px-2 py-1 bg-gray-300 text-white rounded-md"
-                onClick={handleIncrement}
+                onClick={() => handleIncrement(item)}
               >
                 +
               </button>
@@ -137,34 +145,17 @@ export default function Cart({ data }) {
         value={"Checkout"}
         className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
       />
-
-      <Link href={"./coupons"} className="text-blue-500 hover:underline">
-        Check coupons
-      </Link>
     </>
   );
 }
 
-// export async function getServerSideProps(context) {
-//   // const id = await Cookies.get("Id");
-//   const ParsedCookie = cookie.parse(context.req.headers.cookie);
-//   console.log("Parsed Cookies", ParsedCookie);
-//   // console.log("async func", id);
-//   // const id = sessionStorage.getItem("id");
-//   // console.log("id: ", Cookies.get("Id"));
-//   const response = await axios.get(
-//     "https://flagrant-part-production.up.railway.app/api/cart/customer/" + ParsedCookie.Id
-//   );
-//   const data = await response.data;
+export async function getServerSideProps(context) {
+  const response = await axios.get(
+    "https://flagrant-part-production.up.railway.app/api/cart/customer/1"
+  );
+  const data = await response.data;
 
-//   // const cart = data.forEach(element => {
-//   //   if(!element.transactionId)
+  console.log(data);
 
-//   // });
-
-//   console.log(data);
-
-//   return { props: { data } };
-// }
-
-
+  return { props: { data } };
+}

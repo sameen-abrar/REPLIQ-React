@@ -22,6 +22,12 @@ export default function Layout(props) {
             </p>
           </Link>
 
+          <Link href="/customers/chefs">
+            <p className="text-white font-semibold hover:text-gray-300 transition duration-300 ease-in-out">
+              Chefs
+            </p>
+          </Link>
+
           <Link href="./cart">
             <p className="text-white font-semibold hover:text-gray-300 transition duration-300 ease-in-out">
               Cart

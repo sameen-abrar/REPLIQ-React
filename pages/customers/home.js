@@ -12,46 +12,62 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function HomePage({ data }) {
   const [search, setSearch] = useState("");
-  const [searchResults, setSearchResults] = useState([
-    {
-      id: 2,
-      Food_Name: "Pizza",
-      Food_Desc: "12 inch",
-    },
-    {
-      id: 4,
-      Food_Name: "Fried Rice",
-      Food_Desc: "Chinese",
-    },
-    {
-      id: 5,
-      Food_Name: "Teriyaki",
-      Food_Desc: "Japanese",
-    },
-    {
-      id: 6,
-      Food_Name: "Grilled Chicken",
-      Food_Desc: "Indian",
-    },
-  ]);
+  const [cart, setCart] = useState({
+    customerId: 1,
+    Amount: 1,
+    menuId: "",
+  });
+  const [searchResults, setSearchResults] = useState(data);
+
+  useEffect(() => {
+    const results = data.filter((item) =>
+      item.Food_Name.toLowerCase().includes(search.toLowerCase())
+    );
+    setSearchResults(results);
+  }, [search]);
 
   const handleSearch = (event) => {
+    // event.preventDefault();
     setSearch(event.target.value);
   };
 
-  // useEffect(() => {
-  //   const results = data.filter((item) =>
-  //     item.Food_Name.toLowerCase().includes(search.toLowerCase())
-  //   );
-  //   setSearchResults(results);
-  // }, [search]);
+  const AddToCart = async (item) => {
+    try {
+      // event.preventDefault();
+      const confirmed = window.confirm(`Add ${item.Food_Name} to cart`);
+      console.log("cart id 123: ", item);
+
+      if (confirmed) {
+        // cart.customerId = Cookies.get("Id");
+        cart.menuId = item.id;
+        console.log(cart);
+
+        const response = await fetch(
+          "https://flagrant-part-production.up.railway.app/api/cart/insert",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(cart),
+          }
+        );
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <Layout title="Home" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-center my-8">
           <div className="w-full max-w-sm">
-            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form
+              className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+              // onSubmit={handleSearch}
+            >
               <h2 className="mb-2 text-2xl font-bold">Search Food</h2>
               <h3 className="text-lg mb-6">Food that’s good for your heart.</h3>
               <div className="mb-4">
@@ -63,9 +79,7 @@ export default function HomePage({ data }) {
                   name="search"
                   placeholder="Enter category of food"
                   value={search}
-                  onChange={(e) => {
-                    setSearch(e.target.value);
-                  }}
+                  onChange={handleSearch}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -79,38 +93,6 @@ export default function HomePage({ data }) {
           </div>
         </div>
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data.map((item) => (
-            <div
-              key={item.Food_ID}
-              className="bg-white overflow-hidden shadow rounded-lg"
-            >
-              <Image
-                // src="/Pizza-3007395.jpg"
-                src={`/${item.id}.jpg`}
-                alt={item.Food_Name}
-                width={640}
-                height={426}
-              />
-              <div className="px-4 py-5 sm:p-6">
-                <h3 className="text-lg leading-6 font-medium text-gray-900">
-                  {item.Food_Name}
-                </h3>
-                <p className="mt-2 max-w-2xl text-sm text-gray-500">
-                  {item.Food_Desc}
-                </p>
-              </div>
-              <div className="px-4 py-3 sm:px-6">
-                <Link
-                  href={`./menu/${item.id}`}
-                  className="text-base font-medium text-red-600 hover:text-red-500"
-                >
-                  View Details
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div> */}
         {searchResults.length === 0 ? (
           <div className="my-8 text-center">
             No results found for '{search}'
@@ -119,7 +101,7 @@ export default function HomePage({ data }) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {searchResults.map((item) => (
               <div
-                key={item.Food_ID}
+                key={item.id}
                 className="bg-white overflow-hidden shadow rounded-lg"
               >
                 <Image
@@ -133,7 +115,7 @@ export default function HomePage({ data }) {
                     {item.Food_Name}
                   </h3>
                   <p className="mt-2 max-w-2xl text-sm text-gray-500">
-                    {item.Food_Desc}
+                    {item.Description}
                   </p>
                 </div>
                 <div className="px-4 py-3 sm:px-6">
@@ -143,20 +125,19 @@ export default function HomePage({ data }) {
                   >
                     View Details
                   </Link>
+                  {"   "}
+                  <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => AddToCart(item)}
+                  >
+                    Add to cart
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* <div className="my-8 text-center">
-          <Link
-            href={"./chefs"}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Meet Our Chefs
-          </Link>
-        </div> */}
         <div className="my-8 text-center">
           <Link
             href={"./chefs"}
@@ -170,13 +151,16 @@ export default function HomePage({ data }) {
   );
 }
 
-// export async function getServerSideProps() {
-//   const id = parseInt(Cookies.get("userId"));
-//   console.log("async func", id);
-//   const response = await axios.get(`https://flagrant-part-production.up.railway.app/api/menu`);
-//   const data = await response.data;
+export async function getServerSideProps() {
+  // This is a nestJS api I created for a university project...
+  // https://railway.app/project/8d3b6e7f-a9fa-4bbf-ba44-2b47a9cecaeb
 
-//   console.log(data);
+  const response = await axios.get(
+    `https://flagrant-part-production.up.railway.app/api/menu`
+  );
+  const data = await response.data;
 
-//   return { props: { data } };
-// }
+  console.log(data);
+
+  return { props: { data } };
+}

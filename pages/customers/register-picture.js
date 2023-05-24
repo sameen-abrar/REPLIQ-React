@@ -10,23 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RegisterPicture() {
   return (
-    // <>
-    //   {/* <Layout title = 'Registration'/> */}
-    //   <Header title={"SignUp"}></Header>
-    //   <fieldset>
-    //     <legend>Registration</legend>
-    //     <form>
-    //       <label>
-    //         Upload picture:
-    //         <input type="file" name="profilePicture" />
-    //         <br />
-    //         <input type="submit" value={"Confirm"} />
-    //         <Link href={'/'}>Skip</Link>
-    //       </label>
-    //       <br />
-    //     </form>
-    //   </fieldset>
-    // </>
     <>
       <Header title={"SignUp"}></Header>
       <fieldset className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
