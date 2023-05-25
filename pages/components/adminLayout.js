@@ -24,7 +24,7 @@ export default function AdminLayout(props) {
           <Link href={"/admin/customerlist"}>Customer List</Link>
         </div>
         <div className="border-t-4 border-l-4 border-gray-300 border-solid text-center hover:bg-red-200">
-          Settings
+          <button onClick={() => {window.alert("Not Implemented")}}>Settings</button>
         </div>
       </div>
     </>

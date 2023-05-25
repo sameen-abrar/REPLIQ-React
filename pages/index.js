@@ -66,6 +66,13 @@ export default function Home() {
             </p>
           </Link>
         </li>
+        <li>
+          <Link href="/admin/dashboard">
+            <p className="text-lg text-gray-700 hover:text-blue-500 transition-colors duration-300">
+              Admin Dashboard
+            </p>
+          </Link>
+        </li>
       </ul>
     </>
   );
