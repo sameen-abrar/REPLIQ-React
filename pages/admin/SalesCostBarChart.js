@@ -1,14 +1,8 @@
-import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import styles from "@/styles/Home.module.css";
-import Layout from "../components/layout";
-import Link from "next/link";
-import axios from "axios";
-import * as cookie from "cookie";
+import React from "react";
 import { useEffect, useState } from "react";
-import Header from "../components/header";
 import BarChart from "../components/BarChart";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
