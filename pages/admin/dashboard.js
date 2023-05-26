@@ -1,7 +1,4 @@
 import { Inter } from "next/font/google";
-import SalesCostChart from "./SalesCostBarChart";
-import SalesCostLineChart from "./SalesCostLineChart";
-import SalesCostPieChart from "./SalesCostPieChart";
 import AdminLayout from "../components/adminLayout";
 import { useEffect, useState } from "react";
 import BarChart from "../components/BarChart";

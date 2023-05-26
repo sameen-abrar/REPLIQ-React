@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import AdminLayout from "../components/adminLayout";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,45 +43,18 @@ export default function CustomerList() {
   ]);
 
   return (
-    // <>
-    //   <div className="flex">
-    //     <AdminLayout title={"Dashboard"} />
-    //     {customers.length > 0 ? (
-    //       <div className="flex-1 m-4">
-    //         <div>
-    //           <table className="w-full">
-    //             <thead>
-    //               <tr>
-    //                 <th className="py-2 px-4">Name</th>
-    //                 <th className="py-2 px-4">Phone</th>
-    //                 <th className="py-2 px-4">Email</th>
-    //                 <th className="py-2 px-4">Number of returns</th>
-    //               </tr>
-    //             </thead>
-    //             <tbody>
-    //               {customers.map((customer) => (
-    //                 <tr key={customer.id}>
-    //                   <td className="py-2 px-4">{customer.name}</td>
-    //                   <td className="py-2 px-4">{customer.phone}</td>
-    //                   <td className="py-2 px-4">{customer.email}</td>
-    //                   <td className="py-2 px-4">{customer.no_of_returns}</td>
-    //                 </tr>
-    //               ))}
-    //             </tbody>
-    //           </table>
-    //         </div>
-    //       </div>
-    //     ) : (
-    //       <p>...Loading</p>
-    //     )}
-    //   </div>
-    // </>
     <>
       <div className="flex">
         <AdminLayout title="Dashboard" />
         {customers.length > 0 ? (
           <div className="flex-1 m-4">
             <div>
+              <Link
+                href={"/admin/addcustomer"}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline hover:shadow-lg"
+              >
+                Add customer
+              </Link>
               <table className="w-full">
                 <thead>
                   <tr>
